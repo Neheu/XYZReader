@@ -1,0 +1,41 @@
+<resources>
+    <!-- detail -->
+    <dimen name="detail_title_text_size">32sp</dimen>
+    <dimen name="detail_body_text_size">22sp</dimen>
+    <item name="detail_body_line_spacing_multiplier" format="float" type="fraction">1.25</item>
+
+    <dimen name="fab_elevation">2dp</dimen>
+    <dimen name="fab_press_translation_z">6dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
+    <!-- Cardview grid item -->
+    <dimen name="card_primary_title_top_padding">24dp</dimen>
+    <dimen name="card_primary_title_bottom_padding">16dp</dimen>
+    <dimen name="card_default_padding">16dp</dimen>
+    <dimen name="card_supporting_text_bottom_padding">24dp</dimen>
+    <dimen name="card_supporting_text_top_padding">16dp</dimen>
+    <dimen name="card_primary_title_text_size">16sp</dimen>
+    <dimen name="card_subtitle_text_size">14sp</dimen>
+    <dimen name="base_grid_list_spacing">2dp</dimen>
+
+        <!-- Default screen margins, per the Android Design guidelines. -->
+        <dimen name="horizontal_margin">16dp</dimen>
+        <dimen name="vertical_margin">16dp</dimen>
+
+        <dimen name="text_headline">24sp</dimen>
+        <dimen name="text_large_title">22sp</dimen>
+        <dimen name="text_title">20sp</dimen>
+        <dimen name="text_large_body">18sp</dimen>
+        <dimen name="text_body">16sp</dimen>
+        <dimen name="text_small_body">14sp</dimen>
+
+        <dimen name="card_margin">16dp</dimen>
+        <dimen name="item_offset">2dp</dimen>
+        <dimen name="list_item_textview_padding">16dp</dimen>
+        <dimen name="list_item_textview_padding_bottom">4dp</dimen>
+        <dimen name="detail_backdrop_height">256dp</dimen>
+        <dimen name="detail_view_padding_top">24dp</dimen>
+        <dimen name="expand_title_margin_end">64dp</dimen>
+        <dimen name="expand_title_margin_start">48dp</dimen>
+
+    </resources>
+
