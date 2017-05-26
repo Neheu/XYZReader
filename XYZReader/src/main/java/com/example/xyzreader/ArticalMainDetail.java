@@ -35,6 +35,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.ui.ArticleDetailActivity;
+import com.example.xyzreader.ui.DrawInsetsFrameLayout;
 import com.example.xyzreader.ui.ImageLoaderHelper;
 
 
@@ -49,8 +50,8 @@ public class ArticalMainDetail extends Fragment implements
     private long mItemId;
     private View mRootView;
     private int mMutedColor = 0xFF333333;
-    private NestedScrollView mScrollView;
-    //private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
+    //private NestedScrollView mScrollView;
+    private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
     private ColorDrawable mStatusBarColorDrawable;
 
     private int mTopInset;
@@ -114,16 +115,16 @@ public class ArticalMainDetail extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.artical_detail_fragment, container, false);
-//        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
-//                mRootView.findViewById(R.id.draw_insets_frame_layout);
-//        mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
-//            @Override
-//            public void onInsetsChanged(Rect insets) {
-//                mTopInset = insets.top;
-//            }
-//        });
+        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
+                mRootView.findViewById(R.id.draw_insets_frame_layout);
+        mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
+            @Override
+            public void onInsetsChanged(Rect insets) {
+                mTopInset = insets.top;
+            }
+        });
 
-        mScrollView = (NestedScrollView) mRootView.findViewById(R.id.scrollview);
+        //mScrollView = (NestedScrollView) mRootView.findViewById(R.id.scrollview);
 
 
         mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
@@ -233,8 +234,8 @@ public class ArticalMainDetail extends Fragment implements
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
-//                                mRootView.findViewById(R.id.meta_bar)
-//                                        .setBackgroundColor(mMutedColor);
+                                mRootView.findViewById(R.id.meta_bar)
+                                        .setBackgroundColor(mMutedColor);
                                 updateStatusBar();
                             }
                         }
