@@ -233,7 +233,6 @@ private static final String TAG = ArticleListActivity.class.toString();
 //                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
 //                    ImageLoaderHelper.getInstance(getActivity()).getImageLoader());
 //            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-            Log.e(">>>>>  ",mCursor.getString(ArticleLoader.Query.THUMB_URL));
             Picasso.with(getActivity())
                     .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
                     .config(Bitmap.Config.RGB_565)
