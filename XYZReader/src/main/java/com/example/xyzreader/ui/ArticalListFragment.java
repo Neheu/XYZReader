@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.xyzreader.MainActivity;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
@@ -48,7 +49,7 @@ import static com.example.xyzreader.data.UpdaterService.BROADCAST_ACTION_STATE_C
 
 public class ArticalListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 // ------------------------------ FIELDS ------------------------------
-private static final String TAG = ArticleListActivity.class.toString();
+private static final String TAG = MainActivity.class.toString();
 
     BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
         @Override

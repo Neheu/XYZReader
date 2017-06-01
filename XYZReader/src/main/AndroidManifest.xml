@@ -14,15 +14,6 @@
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/AppTheme.Base">
         <activity
-            android:name=".ui.ArticleListActivity"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.ArticleDetailActivity"
             android:parentActivityName=".ui.ArticleListActivity">
             <intent-filter>
@@ -52,6 +43,14 @@
             android:name=".MainActivity"
             >
             <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+
+
+                    <data android:mimeType="vnd.android.cursor.item/vnd.com.example.xyzreader.items" />
+
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".MainActivity" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

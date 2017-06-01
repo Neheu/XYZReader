@@ -35,8 +35,9 @@
     <dimen name="detail_view_padding_top">24dp</dimen>
     <dimen name="expand_title_margin_end">64dp</dimen>
     <dimen name="expand_title_margin_start">48dp</dimen>
-    <dimen name="elevation_appbar">4dp</dimen>
+    <dimen name="elevation_appbar">6dp</dimen>
     <dimen name="elevation_fab">8dp</dimen>
-
+    <dimen name="detail_toolbar_height">80dp</dimen>
+    <dimen name="detail_toolbar_title_margin_bottom">40dp</dimen>
 </resources>
 

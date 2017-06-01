@@ -21,11 +21,13 @@ import java.util.GregorianCalendar;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
@@ -63,22 +65,20 @@ public class ArticleDetailFragment extends Fragment implements
     private View mRootView;
     private int mMutedColor = 0xFF333333;
     private ObservableScrollView mScrollView;
-//    private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
-  //  private ColorDrawable mStatusBarColorDrawable;
+    //    private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
+    //  private ColorDrawable mStatusBarColorDrawable;
     private FloatingActionButton shareButton;
-    private int mTopInset;
-    private View mPhotoContainerView;
     private ImageView mPhotoView;
     private int mScrollY;
-    private boolean mIsCard = false;
-   // private int mStatusBarFullOpacityBottom;
-
+    // private int mStatusBarFullOpacityBottom;
+    private Toolbar mToolbar;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
     private CollapsingToolbarLayout mCollapsingToolbar;
+    private AppBarLayout appBarLayout;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -102,13 +102,7 @@ public class ArticleDetailFragment extends Fragment implements
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
-
-        mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-       // mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(
-       //         R.dimen.detail_card_top_margin);
-
         setHasOptionsMenu(true);
-        getLoaderManager().initLoader(0, null, this);
 
     }
 
@@ -124,20 +118,24 @@ public class ArticleDetailFragment extends Fragment implements
         // the fragment's onCreate may cause the same LoaderManager to be dealt to multiple
         // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
         // we do this in onActivityCreated.
+        getLoaderManager().initLoader(0, null, this);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(mRootView==null) {
+        if (mRootView == null) {
             mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
             mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
-            shareButton = (FloatingActionButton)  mRootView.findViewById(R.id.share_fab);
+            shareButton = (FloatingActionButton) mRootView.findViewById(R.id.share_fab);
+            mToolbar = (Toolbar) mRootView.findViewById(R.id.detail_toolbar);
+            appBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar);
 
             mCollapsingToolbar =
                     (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar);
-           shareButton.setOnClickListener(new View.OnClickListener() {
+            shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
@@ -180,14 +178,16 @@ public class ArticleDetailFragment extends Fragment implements
             return new Date();
         }
     }
+
     private void bindViews() {
         if (mRootView == null) {
             return;
         }
         TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
         TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
-        bylineView.setMovementMethod(new LinkMovementMethod());
+//        bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+
 
         ViewTreeObserver viewTreeObserver = shareButton.getViewTreeObserver();
         if (viewTreeObserver.isAlive()) {
@@ -209,10 +209,32 @@ public class ArticleDetailFragment extends Fragment implements
 //        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
+
+
+            final String title = mCursor.getString(ArticleLoader.Query.TITLE);
+            String author = Html.fromHtml(
+                    DateUtils.getRelativeTimeSpanString(
+                            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_ALL).toString()
+                            + " by "
+                            + mCursor.getString(ArticleLoader.Query.AUTHOR)).toString();
+            final String body = Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)).toString();
+//            String photo = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
+
+
+
+            titleView.setText(title);
+            bylineView.setText(author);
+            bodyView.setText(body);
+
+
+
+
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
-            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
+//            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
             Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
                 bylineView.setText(Html.fromHtml(
@@ -232,28 +254,18 @@ public class ArticleDetailFragment extends Fragment implements
                                 + "</font>"));
 
             }
-            bodyView.setText(Html.fromHtml("<align= 'justify'"+mCursor.getString(ArticleLoader.Query.BODY)
-            .replaceAll("(\r\n|\n)", "<br />")));
-//            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
-//                    .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
-//                        @Override
-//                        public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-//                            Bitmap bitmap = imageContainer.getBitmap();
-//                            if (bitmap != null) {
-//                                Palette p = Palette.generate(bitmap, 12);
-//                                mMutedColor = p.getDarkMutedColor(0xFF333333);
-//                                mPhotoView.setImageBitmap(imageContainer.getBitmap());
-//                                mRootView.findViewById(R.id.meta_bar)
-//                                        .setBackgroundColor(mMutedColor);
-//                               // updateStatusBar();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onErrorResponse(VolleyError volleyError) {
-//
-//                        }
-//                    });
+//            bodyView.setText(Html.fromHtml("<align= 'justify'" + mCursor.getString(ArticleLoader.Query.BODY)
+//                    .replaceAll("(\r\n|\n)", "<br />")));
+            if (mToolbar != null) {
+
+                mToolbar.setNavigationIcon(R.drawable.ic_back);
+                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                });
+            }
 
 
             Picasso.with(getActivity())
@@ -264,7 +276,7 @@ public class ArticleDetailFragment extends Fragment implements
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
-            bylineView.setText("N/A" );
+            bylineView.setText("N/A");
             bodyView.setText("N/A");
         }
     }
@@ -276,10 +288,10 @@ public class ArticleDetailFragment extends Fragment implements
 
 
     @Override
-    public void onDestroy() {  // could be in onPause or onStop
-//        Picasso.with(getActivity()).cancelRequest(target);
+    public void onDestroy() {
         super.onDestroy();
     }
+
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         if (!isAdded()) {
@@ -288,6 +300,17 @@ public class ArticleDetailFragment extends Fragment implements
             }
             return;
         }
+        if (mToolbar != null) {
+
+            mToolbar.setNavigationIcon(R.drawable.ic_back);
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().finish();
+                }
+            });
+        }
+
 
         mCursor = cursor;
         if (mCursor != null && !mCursor.moveToFirst()) {
@@ -301,7 +324,7 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mCursor = null;
-        bindViews();
+//        bindViews();
     }
 
 

@@ -36,4 +36,7 @@
     <style name="Theme.ActionBarStyle" parent="@android:style/Widget.TextView">
        <item name="android:textColor">#ffffff</item>
     </style>
+    <style name="DetailTitleTextAppearance" parent="@android:style/TextAppearance.Large">
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
