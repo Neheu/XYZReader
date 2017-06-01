@@ -21,6 +21,7 @@ import java.util.GregorianCalendar;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
@@ -77,6 +78,7 @@ public class ArticleDetailFragment extends Fragment implements
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -133,7 +135,8 @@ public class ArticleDetailFragment extends Fragment implements
             mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
             shareButton = (FloatingActionButton)  mRootView.findViewById(R.id.share_fab);
 
-
+            mCollapsingToolbar =
+                    (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar);
            shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -177,18 +180,6 @@ public class ArticleDetailFragment extends Fragment implements
             return new Date();
         }
     }
-    public byte[] scaleDownBitmap(Bitmap photo, int newHeight) {
-
-        final float densityMultiplier = getActivity().getResources().getDisplayMetrics().density;
-
-        int h= (int) (newHeight*densityMultiplier);
-        int w= (int) (h * photo.getWidth()/((double) photo.getHeight()));
-
-        photo=Bitmap.createScaledBitmap(photo, w, h, true);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-            }
     private void bindViews() {
         if (mRootView == null) {
             return;
@@ -215,7 +206,7 @@ public class ArticleDetailFragment extends Fragment implements
                 }
             });
         }
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+//        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -241,7 +232,8 @@ public class ArticleDetailFragment extends Fragment implements
                                 + "</font>"));
 
             }
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            bodyView.setText(Html.fromHtml("<align= 'justify'"+mCursor.getString(ArticleLoader.Query.BODY)
+            .replaceAll("(\r\n|\n)", "<br />")));
 //            ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
 //                    .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
 //                        @Override
