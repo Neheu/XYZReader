@@ -26,6 +26,7 @@
         <item name="colorAccent">@color/accentColor</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:actionBarStyle">@style/Theme.ActionBarStyle</item>
         <item name="android:textColorPrimary">@color/color_secondary</item>
 
@@ -39,4 +40,7 @@
     <style name="DetailTitleTextAppearance" parent="@android:style/TextAppearance.Large">
         <item name="android:textStyle">bold</item>
     </style>
+
+
+
 </resources>

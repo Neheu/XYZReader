@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -44,14 +46,18 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
- * either contained in a {@link ArticleListActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends Fragment implements
@@ -79,6 +85,7 @@ public class ArticleDetailFragment extends Fragment implements
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
     private CollapsingToolbarLayout mCollapsingToolbar;
     private AppBarLayout appBarLayout;
+    int barColor;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -131,6 +138,7 @@ public class ArticleDetailFragment extends Fragment implements
             mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
             shareButton = (FloatingActionButton) mRootView.findViewById(R.id.share_fab);
             mToolbar = (Toolbar) mRootView.findViewById(R.id.detail_toolbar);
+
             appBarLayout = (AppBarLayout) mRootView.findViewById(R.id.app_bar);
 
             mCollapsingToolbar =
@@ -223,7 +231,6 @@ public class ArticleDetailFragment extends Fragment implements
 //            String photo = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
 
 
-
             titleView.setText(title);
             bylineView.setText(author);
             bodyView.setText(body);
@@ -268,11 +275,45 @@ public class ArticleDetailFragment extends Fragment implements
             }
 
 
-            Picasso.with(getActivity())
-                    .load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
-                    .config(Bitmap.Config.RGB_565)
-                    .into(mPhotoView);
+//            Picasso.with(getActivity())
+//                    .load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
+//                    .config(Bitmap.Config.RGB_565)
+//                    .into(mPhotoView);
+//            Glide.with(getActivity()).load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
+//                    .override(400,200)
+//                    .into(mPhotoView);
 
+            Glide.with(getActivity())
+                    .load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
+                    .override(400,200)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            Bitmap bitmap = ((GlideBitmapDrawable) resource.getCurrent()).getBitmap();
+                            if (bitmap != null) {
+                                Palette p = Palette.generate(bitmap, 12);
+                                barColor = p.getDarkVibrantColor(p.getDarkMutedColor(0xFF333333));
+                                int scrimColor = p.getVibrantColor(p.getMutedColor(0xFF888888));
+                                mRootView.findViewById(R.id.meta_bar)
+                                        .setBackgroundColor(barColor);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getActivity() != null && getActivity().getWindow() != null) {
+                                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                                    getActivity().getWindow().setStatusBarColor(barColor);
+                                }                                shareButton.setBackgroundTintList(ColorStateList.valueOf(scrimColor));
+                                mCollapsingToolbar.setContentScrimColor(barColor);
+                            }
+                            return false;
+                        }
+                    })
+
+
+                    .into(mPhotoView);
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
@@ -326,6 +367,5 @@ public class ArticleDetailFragment extends Fragment implements
         mCursor = null;
 //        bindViews();
     }
-
 
 }

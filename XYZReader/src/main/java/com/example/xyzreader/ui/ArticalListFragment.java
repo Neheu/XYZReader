@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -29,6 +30,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.xyzreader.MainActivity;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
@@ -234,10 +241,14 @@ private static final String TAG = MainActivity.class.toString();
 //                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
 //                    ImageLoaderHelper.getInstance(getActivity()).getImageLoader());
 //            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-            Picasso.with(getActivity())
-                    .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
-                    .config(Bitmap.Config.RGB_565)
+//            Picasso.with(getActivity())
+//                    .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+//                    .config(Bitmap.Config.RGB_565)
+//                    .into(holder.thumbnailView);
+            Glide.with(getActivity()).load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+                    .override(100,100)
                     .into(holder.thumbnailView);
+
         }
 
         @Override
