@@ -216,7 +216,7 @@
         android:clickable="true"
         android:contentDescription="@string/action_share"
         android:src="@drawable/ic_share"
-        app:elevation="@dimen/elevation_appbar"
+        app:elevation="@dimen/elevation_fab"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end|right"
         app:layout_behavior="com.example.xyzreader.ui.FABScrollAnimation"

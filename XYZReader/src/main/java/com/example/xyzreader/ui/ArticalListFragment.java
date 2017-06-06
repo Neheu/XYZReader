@@ -241,13 +241,11 @@ private static final String TAG = MainActivity.class.toString();
 //                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
 //                    ImageLoaderHelper.getInstance(getActivity()).getImageLoader());
 //            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
-//            Picasso.with(getActivity())
-//                    .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
-//                    .config(Bitmap.Config.RGB_565)
-//                    .into(holder.thumbnailView);
-            Glide.with(getActivity()).load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
-                    .override(100,100)
+            Picasso.with(getActivity())
+                    .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
+                    .config(Bitmap.Config.RGB_565)
                     .into(holder.thumbnailView);
+
 
         }
 
