@@ -27,6 +27,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -143,6 +144,8 @@ public class ArticleDetailFragment extends Fragment implements
 
             mCollapsingToolbar =
                     (CollapsingToolbarLayout) mRootView.findViewById(R.id.collapsing_toolbar);
+            mCollapsingToolbar.setTitleEnabled(true);
+
             shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -191,10 +194,11 @@ public class ArticleDetailFragment extends Fragment implements
         if (mRootView == null) {
             return;
         }
-        TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
+        /*TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
         TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
-//        bylineView.setMovementMethod(new LinkMovementMethod());
+//        bylineView.setMovementMethod(new LinkMovementMethod());*/
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+
 
 
         ViewTreeObserver viewTreeObserver = shareButton.getViewTreeObserver();
@@ -220,19 +224,24 @@ public class ArticleDetailFragment extends Fragment implements
 
 
             final String title = mCursor.getString(ArticleLoader.Query.TITLE);
-            String author = Html.fromHtml(
+            mCollapsingToolbar.setTitle(title);
+           /* String author = Html.fromHtml(
                     DateUtils.getRelativeTimeSpanString(
                             mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
                             System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
                             DateUtils.FORMAT_ABBREV_ALL).toString()
                             + " by "
                             + mCursor.getString(ArticleLoader.Query.AUTHOR)).toString();
+            //            bylineView.setText(author);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(author);
+
+            */
             final String body = Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY)).toString();
 //            String photo = mCursor.getString(ArticleLoader.Query.PHOTO_URL);
 
 
-            titleView.setText(title);
-            bylineView.setText(author);
+//            titleView.setText(title);
+//            bylineView.setText(author);
             bodyView.setText(body);
 
 
@@ -242,7 +251,7 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
 //            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-            Date publishedDate = parsePublishedDate();
+           /* Date publishedDate = parsePublishedDate();
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
                 bylineView.setText(Html.fromHtml(
                         DateUtils.getRelativeTimeSpanString(
@@ -261,9 +270,9 @@ public class ArticleDetailFragment extends Fragment implements
                                 + "</font>"));
 
             }
-//            bodyView.setText(Html.fromHtml("<align= 'justify'" + mCursor.getString(ArticleLoader.Query.BODY)
+*///            bodyView.setText(Html.fromHtml("<align= 'justify'" + mCursor.getString(ArticleLoader.Query.BODY)
 //                    .replaceAll("(\r\n|\n)", "<br />")));
-            if (mToolbar != null) {
+           /* if (mToolbar != null) {
 
                 mToolbar.setNavigationIcon(R.drawable.ic_back);
                 mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -273,15 +282,10 @@ public class ArticleDetailFragment extends Fragment implements
                     }
                 });
             }
+                       mCollapsingToolbar.setTitle(title);
 
+            */
 
-//            Picasso.with(getActivity())
-//                    .load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
-//                    .config(Bitmap.Config.RGB_565)
-//                    .into(mPhotoView);
-//            Glide.with(getActivity()).load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
-//                    .override(400,200)
-//                    .into(mPhotoView);
 
             Glide.with(getActivity())
                     .load(mCursor.getString(ArticleLoader.Query.PHOTO_URL))
@@ -297,11 +301,10 @@ public class ArticleDetailFragment extends Fragment implements
                         public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                             Bitmap bitmap = ((GlideBitmapDrawable) resource.getCurrent()).getBitmap();
                             if (bitmap != null) {
-                                Palette p = Palette.generate(bitmap, 12);
-                                barColor = p.getDarkVibrantColor(p.getDarkMutedColor(0xFF333333));
-                                int scrimColor = p.getVibrantColor(p.getMutedColor(0xFF888888));
-                                mRootView.findViewById(R.id.meta_bar)
-                                        .setBackgroundColor(barColor);
+                                Palette palete = Palette.generate(bitmap, 12);
+                                barColor = palete.getDarkVibrantColor(palete.getDarkMutedColor(0xFF333333));
+                                int scrimColor = palete.getVibrantColor(palete.getMutedColor(0xFF888888));
+
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getActivity() != null && getActivity().getWindow() != null) {
                                     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                                     getActivity().getWindow().setStatusBarColor(barColor);
@@ -316,8 +319,8 @@ public class ArticleDetailFragment extends Fragment implements
                     .into(mPhotoView);
         } else {
             mRootView.setVisibility(View.GONE);
-            titleView.setText("N/A");
-            bylineView.setText("N/A");
+//            titleView.setText("N/A");
+//            bylineView.setText("N/A");
             bodyView.setText("N/A");
         }
     }
@@ -367,5 +370,6 @@ public class ArticleDetailFragment extends Fragment implements
         mCursor = null;
 //        bindViews();
     }
+
 
 }

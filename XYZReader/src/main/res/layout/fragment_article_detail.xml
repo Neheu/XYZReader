@@ -142,10 +142,9 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
             app:expandedTitleMargin="@dimen/horizontal_margin"
-            app:expandedTitleMarginBottom="@dimen/detail_body_bottom_margin"
-            app:expandedTitleTextAppearance="@style/DetailTitleTextAppearance"
+            app:expandedTitleTextAppearance="@style/DetailExpandTitleTextAppearance"
+            app:collapsedTitleTextAppearance="@style/DetailTitleTextAppearance"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
@@ -164,34 +163,6 @@
 
 
 
-                <LinearLayout
-                    android:fitsSystemWindows="true"
-                    android:id="@+id/meta_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:elevation="@dimen/elevation_appbar"
-                    android:orientation="vertical"
-                    android:padding="@dimen/horizontal_margin">
-
-                    <TextView
-                        android:id="@+id/article_title"
-                        style="?android:attr/textAppearanceLarge"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:textColor="@color/color_secondary"
-                        android:textStyle="bold"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/article_byline"
-                        style="?android:attr/textAppearanceSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/color_secondary" />
-
-                </LinearLayout>
 
             </FrameLayout>
 
@@ -199,8 +170,8 @@
                 android:id="@+id/detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:contentInsetStart="@dimen/horizontal_margin"
                 app:layout_collapseMode="pin"
+                app:contentInsetStartWithNavigation="0dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             </android.support.v7.widget.Toolbar>
