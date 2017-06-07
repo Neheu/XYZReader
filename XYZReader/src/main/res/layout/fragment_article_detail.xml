@@ -220,7 +220,7 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end|right"
         app:layout_behavior="com.example.xyzreader.ui.FABScrollAnimation"
-        app:pressedTranslationZ="12dp" />
+        app:pressedTranslationZ="@dimen/transition_pressed_fab" />
 
 </android.support.design.widget.CoordinatorLayout>
 

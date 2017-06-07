@@ -39,5 +39,6 @@
     <dimen name="elevation_fab">6dp</dimen>
     <dimen name="detail_toolbar_height">80dp</dimen>
     <dimen name="detail_toolbar_title_margin_bottom">40dp</dimen>
+    <dimen name="transition_pressed_fab">6dp</dimen>
 </resources>
 
